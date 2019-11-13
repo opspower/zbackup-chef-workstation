@@ -393,7 +393,7 @@ analyze = true
 ```
 
 Description
-: List of experimental features that can be turn on and off. In the above example, there are two turned on features, the `preferences_dialog` feature, and the `analyze` feature. Every feature flag has a way to be turned on through the command line via environment variables. The respective environment variable for the `analize` feature would be `CHEF_FEAT_ANALYZE`. When set to any value, the feature will be turned on.
+: List of experimental features that can be turn on and off. In the above example, there are two turned on features, the `preferences_dialog` feature, and the `analyze` feature. Every feature flag has a way to be turned on through environment variables. The respective environment variable for the `analyze` feature would be `CHEF_FEAT_ANALYZE`. When set to any value, the feature will be turned on.
 
 Values
 : `name = true`, `name = false`
