@@ -30,88 +30,6 @@ Chef Workstation looks for the `config.toml` in a default location.
 
 ## Settings
 
-### Telemetry
-
-Configure telemetry behaviors for Chef Workstation components.
-
-#### Example
-
-```toml
-[telemetry]
-enable=true
-dev=false
-```
-#### enable
-
-Description
-: When `true`, anonymous usage data and bug reports are sent to Chef. See Chef's [Privacy Statement]({{< ref "../chef-workstation/privacy.md" >}}) for the type and usage of gathered data.
-
-Value
-: `true`, `false`
-
-Default
-: `true`
-
-Used by
-: `chef-run`
-
-`CHEF_TELEMETRY_OPT_OUT`
-: When set to any value, `chef-run` will not capture or send telemetry data.
-
-#### dev
-
-Description
-: When set to any value, `chef-run` will not capture or send telemetry data. Only set this if you have access to Chef's internal QA environment - otherwise the telemetry data will not be successfully captured by Chef. If you have access to Chef's internal QA environment, if `dev` and `enable` are both `true`, anonymous data is reported to Chef's QA environment.
-
-Values
-: `true`, `false`
-
-Default
-: `false`
-
-Used by
-: `chef-run`, `Chef Workstation App`
-
-### Log
-
-Control logging level and location.
-
-#### Example
-
-```toml
-[log]
-level="debug"
-location="C:\Users\username\chef-workstation.log"
-```
-
-#### level
-
-Description
-: Determines what messages are logged from locally-run Chef Workstation commands to the to the local log file.
-
-Values
-: `"debug"`, `"warn"`, `"info"`, `"error"`, `"fatal"`
-
-Default
-: `"warn"`
-
-Used by
-: `chef-run`
-
-#### location
-
-Description
-: The location of the local Chef Workstation log file.
-
-Values
-: Value must be a valid, writable file path.
-
-Default
-: `"$USERHOME/.chef-workstation/logs/default.log"
-
-Used by
-: `chef-run`
-
 ### Cache
 
 Configure caching options.
@@ -136,6 +54,52 @@ Values
 
 Used by
 : `chef-run`
+
+### Chef
+
+Configure remote Chef running on instances.
+
+#### Example
+
+```toml
+[chef]
+trusted_certs_dir="/home/username/mytrustedcerts"
+cookbook_repo_paths = [
+  "/home/username/cookbooks",
+  "/var/chef/cookbooks"
+]
+```
+
+#### trusted_certs_dir
+
+Description
+: Describes where to find Chef's trusted certificates. Used to ensure trusted certs are provided to the `chef-client` run on target nodes.
+
+Values
+: A directory containing the trusted certificates for use in the Chef ecosystem.
+
+Default
+:  Look first for `.chef/config.rb` and use that value if provided; otherwise `"/opt/chef-workstation/embedded/ssl/certs/"`
+
+Used by
+: `chef-run`
+
+#### cookbook_repo_paths
+
+Description
+: Path or paths to use for cookbook resolution. When multiple cookbook paths are provided and a cookbook exists in more than one of them, the cookbook found in the last-most directory will be used. Considering the example, when resolving cookbook `mycb`: if `mycb` existed in both `/home/username/cookbooks` and `/var/chef/cookbooks`, `mycb` in `/var/chef/cookbooks` will be used.
+
+Values
+: A string referencing a valid cookbook path, or an array of such strings.  See example for syntax.
+
+Default
+: `cookbook_path` value from `.chef/config.rb`, otherwise not found
+
+Used by
+: `chef-run`
+
+CLI flag
+: `--cookbook-repo-paths PATH1,PATH2,..PATHn`
 
 ### Connection
 
@@ -229,92 +193,6 @@ Used by
 CLI flag
 : --ssl-[no]-verify
 
-### Chef
-
-Configure remote Chef running on instances.
-
-#### Example
-
-```toml
-[chef]
-trusted_certs_dir="/home/username/mytrustedcerts"
-cookbook_repo_paths = [
-  "/home/username/cookbooks",
-  "/var/chef/cookbooks"
-]
-```
-
-#### trusted_certs_dir
-
-Description
-: Describes where to find Chef's trusted certificates. Used to ensure trusted certs are provided to the `chef-client` run on target nodes.
-
-Values
-: A directory containing the trusted certificates for use in the Chef ecosystem.
-
-Default
-:  Look first for `.chef/config.rb` and use that value if provided; otherwise `"/opt/chef-workstation/embedded/ssl/certs/"`
-
-Used by
-: `chef-run`
-
-#### cookbook_repo_paths
-
-Description
-: Path or paths to use for cookbook resolution. When multiple cookbook paths are provided and a cookbook exists in more than one of them, the cookbook found in the last-most directory will be used. Considering the example, when resolving cookbook `mycb`: if `mycb` existed in both `/home/username/cookbooks` and `/var/chef/cookbooks`, `mycb` in `/var/chef/cookbooks` will be used.
-
-Values
-: A string referencing a valid cookbook path, or an array of such strings.  See example for syntax.
-
-Default
-: `cookbook_path` value from `.chef/config.rb`, otherwise not found
-
-Used by
-: `chef-run`
-
-CLI flag
-: `--cookbook-repo-paths PATH1,PATH2,..PATHn`
-
-### Updates
-
-Control the behavior of automatic update checking for Chef Workstation.
-
-#### Example
-
-```toml
-[updates]
-enable=true
-channel="current"
-```
-
-#### enable
-
-Description
-: Enable update checking for Chef Workstation updates.
-
-Values
-: `true`, `false`
-
-Default
-: `true`
-
-Used by
-: Chef Workstation App
-
-#### channel
-
-Description
-: Set the update channel to use when checking for Chef Workstation updates. `"stable"` is the recommended value. Switch to `"current"` is not guaranteed to be stable, and should only be used if you are comfortable with the risks associated.
-
-Values
-: `"stable"`, `"current"`
-
-Default
-: `"stable"`
-
-Used by
-: Chef Workstation App
-
 ### Data_collector
 
 Configure reporting of `chef-client` runs triggered via `chef-run`.
@@ -403,3 +281,86 @@ Values
 
 Used by
 : The entire Chef Workstation ecosystem.
+
+### Log
+
+Control logging level and location.
+
+#### Example
+
+```toml
+[log]
+level="debug"
+location="C:\Users\username\chef-workstation.log"
+```
+
+#### level
+
+Description
+: Determines what messages are logged from locally-run Chef Workstation commands to the to the local log file.
+
+Values
+: `"debug"`, `"warn"`, `"info"`, `"error"`, `"fatal"`
+
+Default
+: `"warn"`
+
+Used by
+: `chef-run`
+
+#### location
+
+Description
+: The location of the local Chef Workstation log file.
+
+Values
+: Value must be a valid, writable file path.
+
+Default
+: `"$USERHOME/.chef-workstation/logs/default.log"
+
+Used by
+: `chef-run`
+
+### Telemetry
+
+Configure telemetry behaviors for Chef Workstation components.
+
+#### Example
+
+```toml
+[telemetry]
+enable=true
+dev=false
+```
+#### enable
+
+Description
+: When `true`, anonymous usage data and bug reports are sent to Chef. See Chef's [Privacy Statement]({{< ref "../chef-workstation/privacy.md" >}}) for the type and usage of gathered data.
+
+Value
+: `true`, `false`
+
+Default
+: `true`
+
+Used by
+: `chef-run`
+
+`CHEF_TELEMETRY_OPT_OUT`
+: When set to any value, `chef-run` will not capture or send telemetry data.
+
+#### dev
+
+Description
+: When set to any value, `chef-run` will not capture or send telemetry data. Only set this if you have access to Chef's internal QA environment - otherwise the telemetry data will not be successfully captured by Chef. If you have access to Chef's internal QA environment, if `dev` and `enable` are both `true`, anonymous data is reported to Chef's QA environment.
+
+Values
+: `true`, `false`
+
+Default
+: `false`
+
+Used by
+: `chef-run`, `Chef Workstation App`
+
